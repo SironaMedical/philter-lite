@@ -27,6 +27,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install tox poetry
-    - name: Test with pytest
+    - name: Test and run checks
       run: |
         tox -e py,lint,typing
