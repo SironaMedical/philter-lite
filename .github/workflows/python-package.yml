@@ -29,4 +29,4 @@ jobs:
         pip install tox poetry
     - name: Test with pytest
       run: |
-        tox -e py,lint
+        tox -e py,lint,typing
