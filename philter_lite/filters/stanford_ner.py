@@ -16,12 +16,11 @@ def build_ner_tagger(
         raise Exception(
             "Filepath does not exist", classifier,
         )
-    else:
-        # download the ner data
-        process = subprocess.Popen(
-            "cd generate_dataset && ./download_ner.sh".split(), stdout=subprocess.PIPE,
-        )
-        process.communicate()
+    # download the ner data
+    process = subprocess.Popen(
+        "cd generate_dataset && ./download_ner.sh".split(), stdout=subprocess.PIPE,
+    )
+    process.communicate()
 
     if not os.path.exists(tagger_jar):
         raise Exception("Filepath does not exist", tagger_jar)
@@ -37,21 +36,14 @@ def map_ner(
     pre_process=r"[^a-zA-Z0-9]+",
 ) -> CoordinateMap:
     """ map NER tagging"""
-    pos_set = set()
-    if pattern.pos:
-        pos_set = set(pattern.pos)
+    pos_set = set(pattern.pos) if pattern.pos else set()
 
     lst = re.split(r"(\s+)", text)
-    cleaned = []
-    for item in lst:
-        if len(item) > 0:
-            cleaned.append(item)
+    cleaned = [item for item in lst if len(item) > 0]
 
     ner_no_spaces = stanford_ner_tagger.tag(cleaned)
     # get our ner tags
-    ner_set = {}
-    for tup in ner_no_spaces:
-        ner_set[tup[0]] = tup[1]
+    ner_set = {tup[0]: tup[1] for tup in ner_no_spaces}
     ner_set_with_locations = {}
     start_coordinate = 0
     for w in cleaned:
