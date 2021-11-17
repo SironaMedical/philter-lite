@@ -53,9 +53,7 @@ def detect_phi(
         (this performs a dry run on the data and doesn't transform)
     """
     # create coordinate maps for each pattern
-    pattern_coords = {}
-    for pat in patterns:
-        pattern_coords[pat.title] = CoordinateMap()
+    pattern_coords = {pat.title: CoordinateMap() for pat in patterns}
 
     # Get full self.include/exclude map before transform
     data_tracker = DataTracker(text_data, [], [])
@@ -67,9 +65,7 @@ def detect_phi(
     include_map = CoordinateMap()
 
     # add file to phi_type_dict
-    phi_type_dict = {}
-    for phi_type in phi_type_list:
-        phi_type_dict[phi_type] = CoordinateMap()
+    phi_type_dict = {phi_type: CoordinateMap() for phi_type in phi_type_list}
 
     # Also add "OTHER" type for filters that aren't appropriately labeled
     phi_type_dict["OTHER"] = CoordinateMap()
@@ -160,8 +156,6 @@ def _map_regex(
         for m in matches:
             coord_map.add_extend(m.start(), m.start() + len(m.group()))
 
-        return coord_map
-
     # MATCHALL/CATCHALL
     else:
         # Split note the same way we would split for set or POS matching
@@ -193,8 +187,7 @@ def _map_regex(
             # advance our start coordinate
             start_coordinate += len(word)
 
-        return coord_map
-
+    return coord_map
 
 def _map_regex_context(
     text,
