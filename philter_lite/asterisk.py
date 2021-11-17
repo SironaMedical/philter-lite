@@ -13,7 +13,7 @@ def transform_text_asterisk(txt, include_map: CoordinateMap):
     punctuation_matcher = re.compile(r"[^a-zA-Z0-9*]")
     # read the text by character, any non-punc non-overlaps will be replaced
     contents = []
-    for i in range(0, len(txt)):
+    for i in range(len(txt)):
 
         if i < last_marker:
             continue
