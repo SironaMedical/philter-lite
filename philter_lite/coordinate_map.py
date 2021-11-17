@@ -31,9 +31,8 @@ class CoordinateMap:
         """ adds a new coordinate to the coordinate map
 
         if overlap is false, this will reject any overlapping hits (usually from multiple regex scan runs)"""
-        if not overlap:
-            if self.does_overlap(start, stop):
-                return False, "Error, overlaps were found: {} {}".format(start, stop)
+        if not overlap and self.does_overlap(start, stop):
+            return False, "Error, overlaps were found: {} {}".format(start, stop)
 
         # add our start / stop coordinates
         self.map[start] = stop
@@ -105,8 +104,7 @@ class CoordinateMap:
                 yield fn, coord, self.map[fn][coord]
 
     def keys(self):
-        for fn in self.map:
-            yield fn
+        yield from self.map
 
     def get_coords(self, start):
         stop = self.map[start]
@@ -120,9 +118,7 @@ class CoordinateMap:
 
     def does_exist(self, index):
         """ Simple check to see if this index is a hit (start of coordinates)"""
-        if index in self.map:
-            return True
-        return False
+        return index in self.map
 
     def does_overlap(self, start, stop):
         """ Check if this coordinate overlaps with any existing range"""
@@ -130,10 +126,7 @@ class CoordinateMap:
         ranges = [list(range(key, self.map[key] + 1)) for key in self.map]
         all_coords = [item for sublist in ranges for item in sublist]
         # removing all_coords implementation until we write some tests
-        for i in range(start, stop + 1):
-            if i in all_coords:
-                return True
-        return False
+        return any(i in all_coords for i in range(start, stop + 1))
 
     def calc_overlap(self, start, stop):
         """ given a set of coordinates, will calculate all overlaps
@@ -150,10 +143,7 @@ class CoordinateMap:
                 else:
                     overlaps.append({"start": s, "stop": stop})
             elif e >= start or e <= stop:
-                if s >= start:
-                    overlaps.append({"start": s, "stop": e})
-                else:
-                    overlaps.append({"start": start, "stop": e})
+                overlaps.append({"start": start, "stop": e})
         return overlaps
 
     def max_overlap(self, start, stop):
@@ -164,37 +154,29 @@ class CoordinateMap:
         overlaps = []
         for s in self.map:
             e = self.map[s]
-            if s <= start <= e:
-                # We found an overlap
-                if stop >= e:
-                    overlaps.append(
-                        {
-                            "orig_start": s,
-                            "orig_end": e,
-                            "new_start": s,
-                            "new_stop": stop,
-                        }
-                    )
-                else:
-                    overlaps.append(
-                        {"orig_start": s, "orig_end": e, "new_start": s, "new_stop": e}
-                    )
+            if s <= start <= e and stop >= e:
+                overlaps.append(
+                    {
+                        "orig_start": s,
+                        "orig_end": e,
+                        "new_start": s,
+                        "new_stop": stop,
+                    }
+                )
+            elif s <= start <= e or s <= stop <= e and start > s:
+                overlaps.append(
+                    {"orig_start": s, "orig_end": e, "new_start": s, "new_stop": e}
+                )
 
             elif s <= stop <= e:
-                if start <= s:
-                    overlaps.append(
-                        {
-                            "orig_start": s,
-                            "orig_end": e,
-                            "new_start": start,
-                            "new_stop": e,
-                        }
-                    )
-                else:
-                    overlaps.append(
-                        {"orig_start": s, "orig_end": e, "new_start": s, "new_stop": e}
-                    )
-
+                overlaps.append(
+                    {
+                        "orig_start": s,
+                        "orig_end": e,
+                        "new_start": start,
+                        "new_stop": e,
+                    }
+                )
         return overlaps
 
     def get_complement(self, text):
