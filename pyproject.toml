@@ -6,7 +6,7 @@ authors = ["Beau Norgeot <beaunorgeot@gmail.com>", "Tim Orme <tim@sironamedical.
 license = "BSD-3-Clause"
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = "^3.7"
 chardet = "^3.0.4"
 nltk = "^3.5"
 #xmltodict = "^0.12.0"
