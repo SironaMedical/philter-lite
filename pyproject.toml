@@ -3,12 +3,14 @@ name = "philter-lite"
 version = "0.4.0"
 description = "Open-source PHI-filtering software. A fork of philter-ucsf."
 readme = "README.md"
-authors = ["Beau Norgeot <beaunorgeot@gmail.com>", "Tim Orme <tim@sironamedical.com>"]
+authors = [
+    "Beau Norgeot <beaunorgeot@gmail.com>",
+    "Tim Orme <tim@sironamedical.com>",
+]
 license = "BSD-3-Clause"
-classifiers=[
+classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -17,19 +19,28 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 chardet = "^5.2.0"
-nltk = "^3.5"
+nltk = "^3.8.1"
 xmltodict = "^0.13.0"
 toml = "^0.10.0"
 
 [tool.poetry.dev-dependencies]
-pre-commit = "^3.3.3"
-pytest = "^7.4.0"
+pre-commit = "^3.7.0"
+pytest = "^8.1.1"
 
 [tool.poetry.scripts]
 philter_lite = 'philter_lite.main:main'
 
 [build-system]
-requires = ["poetry_core>=1.6.0"]
+requires = ["poetry_core>=1.8.1"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.mypy]
+check_untyped_defs = true
+no_implicit_optional = true
+
+[[tool.mypy.overrides]]
+module = ["nltk", "nltk.*"]
+ignore_missing_imports = true
