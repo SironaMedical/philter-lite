@@ -1,5 +1,5 @@
 from importlib import resources
-from typing import Any, Dict, MutableMapping
+from typing import Any, MutableMapping
 
 import toml
 

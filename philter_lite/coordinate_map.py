@@ -2,13 +2,15 @@ import itertools
 import re
 from typing import List
 
+PUNCTUATION_MATCHER = re.compile(r"[^a-zA-Z0-9*]")
+
 
 class CoordinateMap:
     """Hits are stored in a coordinate map data structure
 
     This class stores start coordinates for any matches found for this pattern"""
 
-    def __init__(self, pattern={"title": "untitled"}, debug=False):
+    def __init__(self):
         """internal data structure maps filepaths to a map of int:string (coordinate start --> stop)
 
         map is the internal structure of
@@ -23,14 +25,13 @@ class CoordinateMap:
 
         self.map = {}
         self.coord2pattern = {}
-        self.pattern = pattern
-        self.debug = debug
         self.all_coords = {}
 
     def add(self, start, stop, overlap=False, pattern=""):
         """adds a new coordinate to the coordinate map
 
-        if overlap is false, this will reject any overlapping hits (usually from multiple regex scan runs)"""
+        if overlap is false, this will reject any overlapping hits (usually from multiple regex scan runs)
+        """
         if not overlap:
             if self.does_overlap(start, stop):
                 return False, "Error, overlaps were found: {} {}".format(start, stop)
@@ -62,26 +63,17 @@ class CoordinateMap:
         if len(overlaps) == 0:
             # no overlap, just save these coordinates
             self.add(start, stop, pattern=pattern, overlap=True)
-            # if filename == "./data/i2b2_notes/167-02.txt":
-            # 	print("No overlaps:")
-            # 	print(filename,start,stop,pattern)
         elif len(overlaps) == 1:
             clear_overlaps(overlaps)
             # 1 overlap, save this value
             o = overlaps[0]
             self.add(o["new_start"], o["new_stop"], pattern=pattern, overlap=True)
-            # if filename == "./data/i2b2_notes/167-02.txt":
-            # 	print("One overlap:")
-            # 	print(filename,start,stop,pattern)
         else:
             clear_overlaps(overlaps)
             # greater than 1 overlap, by default this is sorted because of scan order
             o1 = overlaps[0]
             o2 = overlaps[-1]
             self.add(o2["new_start"], o1["new_stop"], pattern=pattern, overlap=True)
-            # if filename == "./data/i2b2_notes/167-02.txt":
-            # 	print("Multiple overlaps:")
-            # 	print(filename,start,stop,pattern)
 
         return True, None
 
@@ -214,9 +206,8 @@ class CoordinateMap:
         )
 
         # Remove punctuation from complement coordinates
-        punctuation_matcher = re.compile(r"[^a-zA-Z0-9*]")
         for i in range(0, len(text)):
-            if punctuation_matcher.match(text[i]):
+            if PUNCTUATION_MATCHER.match(text[i]):
                 if i in complement_coordinates:
                     complement_coordinates.remove(i)
 

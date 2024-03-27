@@ -149,7 +149,7 @@ def _precompile(regex: str):
         )  # in order to print a detailed message
         try:
             re_compiled = re.compile(regex)
-        except FutureWarning as warn:
+        except FutureWarning:
             warnings.simplefilter(action="ignore", category=FutureWarning)
             re_compiled = re.compile(regex)  # assign nevertheless
     return re_compiled

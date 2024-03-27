@@ -118,7 +118,7 @@ def detect_phi(
     # create intersection maps for all phi types and add them to a dictionary containing all maps
     # get full exclude map (only updated either on-command by map_regex_context or at the very end of map_
     # coordinates)
-    full_exclude_map = include_map.get_complement(text_data)
+    # full_exclude_map = include_map.get_complement(text_data)
 
     for phi_type in phi_type_list:
         for start, stop in phi_type_dict[phi_type].filecoords():
