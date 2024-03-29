@@ -11,7 +11,6 @@ license = "BSD-3-Clause"
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -34,7 +33,7 @@ pytest = "^8.1.1"
 philter_lite = 'philter_lite.main:main'
 
 [build-system]
-requires = ["poetry_core>=1.9.0"]
+requires = ["poetry_core>=1.8.1"]
 build-backend = "poetry.core.masonry.api"
 
 
