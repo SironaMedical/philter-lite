@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import nltk
 
-from philter_lite.coordinate_map import CoordinateMap
+from philter_lite.coordinate_map import PUNCTUATION_MATCHER, CoordinateMap
 
 from .filters import Filter, PosFilter, RegexContextFilter, RegexFilter, SetFilter
 
@@ -245,8 +245,6 @@ def _map_regex_context(
             full_exclude_map[start] = stop
 
     # 1. Get coordinates of all include and exclude mathches
-
-    punctuation_matcher = re.compile(r"[^a-zA-Z0-9*]")
     # 2. Find all patterns expressions that match regular expression
     matches = regex.finditer(text)
     for m in matches:
@@ -280,7 +278,7 @@ def _map_regex_context(
         coord_tracker = 0
         for element in split_match:
             if element != "":
-                if not punctuation_matcher.match(element[0]):
+                if not PUNCTUATION_MATCHER.match(element[0]):
                     current_start = match_start + coord_tracker
                     current_end = current_start + len(element)
                     tokenized_matches.append((current_start, current_end))
