@@ -1,7 +1,8 @@
-from .coordinate_map import CoordinateMap, PUNCTUATION_MATCHER
+from .coordinate_map import PUNCTUATION_MATCHER, CoordinateMap
 
 
 def save_to_asterisk(contents, output_file):
+    """Write some data to a text file, using utf-8 encoding."""
     with open(output_file, "w", encoding="utf-8", errors="surrogateescape") as f:
         f.write(contents)
 
@@ -11,7 +12,6 @@ def transform_text_asterisk(txt, include_map: CoordinateMap):
     # read the text by character, any non-punc non-overlaps will be replaced
     contents = []
     for i in range(len(txt)):
-
         if i < last_marker:
             continue
 

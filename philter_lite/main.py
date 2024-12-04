@@ -140,7 +140,7 @@ def main():
         }
 
     if verbose:
-        sys.stdout.write(f"RUNNING {philter_config['filters']}\n")
+        sys.stderr.write(f'RUNNING {philter_config["filters"]}')
 
     filters = philter_lite.load_filters(philter_config["filters"])
 

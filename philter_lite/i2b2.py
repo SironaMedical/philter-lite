@@ -7,7 +7,7 @@ def save_to_i2b2(contents, output_file):
 
 
 def transform_text_i2b2(tagdata: DataTracker):
-    """creates a string in i2b2-XML format"""
+    """Create a string in i2b2-XML format."""
     root = "Philter"
     contents = [
         '<?xml version="1.0" ?>\n',

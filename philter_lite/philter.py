@@ -53,8 +53,8 @@ def detect_phi(
     patterns: List[Filter],
     phi_type_list: List[str] = DEFAULT_PHI_TYPE_LIST,
 ):
-    """Runs the set, or regex on the input data
-    generating a coordinate map of hits given
+    """Run the set or regex on the input data, generating a coordinate map of hits given.
+
     (this performs a dry run on the data and doesn't transform)
     """
     # create coordinate maps for each pattern
@@ -81,8 +81,8 @@ def detect_phi(
 
     pos_list = _get_pos(text_data)
 
-    # Create inital self.exclude/include for file
-    for _i, pat in enumerate(patterns):
+    # Create initial self.exclude/include for file
+    for pat in patterns:
         pattern_coord = pattern_coords[pat.title]
 
         if pat.type == "regex" and isinstance(pat, RegexFilter):
@@ -159,8 +159,9 @@ def _map_regex(
     coord_map: CoordinateMap,
     pre_process=REGEX_NON_ALPHANUM_CHAR,
 ) -> CoordinateMap:
-    """Creates a coordinate map from the pattern on this data
-    generating a coordinate map of hits given (dry run doesn't transform)
+    """Create a coordinate map from the pattern on this data.
+
+    Generates a coordinate map of hits given (dry run doesn't transform).
     """
     regex = pattern.data
 
@@ -215,9 +216,7 @@ def _map_regex_context(
     include_map: CoordinateMap,
     pre_process=REGEX_NON_ALPHANUM_CHAR,
 ) -> CoordinateMap:
-    """map_regex_context creates a coordinate map from combined regex + PHI coordinates
-    of all previously mapped patterns
-    """
+    """Create a CoordinateMap from combined regex + PHI coordinates of all previously mapped patterns."""
     regex = pattern.data
     context = pattern.context
     try:
@@ -246,7 +245,6 @@ def _map_regex_context(
     # 2. Find all patterns expressions that match regular expression
     matches = regex.finditer(text)
     for m in matches:
-
         # initialize phi_left and phi_right
         phi_left = False
         phi_right = False
@@ -299,15 +297,14 @@ def _map_regex_context(
 
 
 def _match_all(text, coord_map: CoordinateMap) -> CoordinateMap:
-    """Simply maps to the entirety of the file"""
+    """Simply map to the entirety of the file."""
     # add the entire length of the file
     coord_map.add(0, len(text))
     return coord_map
 
 
 def _map_set(pos_list, coord_map: CoordinateMap, pattern: SetFilter) -> CoordinateMap:
-    """Creates a coordinate mapping of words any words in this set"""
-
+    """Create a coordinate mapping of words any words in this set."""
     set_data = pattern.data
 
     # get part of speech we will be sending through this set
@@ -342,8 +339,7 @@ def _map_set(pos_list, coord_map: CoordinateMap, pattern: SetFilter) -> Coordina
 
 
 def _map_parts_of_speech(pos_list, pattern: PosFilter, coord_map: CoordinateMap) -> CoordinateMap:
-    """Creates a coordinate mapping of words which match this part of speech (POS)"""
-
+    """Create a coordinate mapping of words which match this part of speech (POS)."""
     pos_set = set(pattern.pos)
 
     # Use pre-process to split sentence by spaces AND symbols, while preserving spaces in the split list

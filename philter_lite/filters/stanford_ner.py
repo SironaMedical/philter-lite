@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import sys
 
 from nltk.tag.stanford import StanfordNERTagger
 
@@ -9,16 +10,12 @@ from philter_lite.coordinate_map import CoordinateMap
 from . import NerFilter
 
 
-def build_ner_tagger(
-    classifier, tagger_jar, download: bool = True
-) -> StanfordNERTagger:
+def build_ner_tagger(classifier, tagger_jar, download: bool = True) -> StanfordNERTagger:
     if not os.path.exists(classifier) and not download:
         raise Exception("Filepath does not exist", classifier)
     else:
         # download the ner data
-        process = subprocess.Popen(
-            "cd generate_dataset && ./download_ner.sh".split(), stdout=subprocess.PIPE
-        )
+        process = subprocess.Popen("cd generate_dataset && ./download_ner.sh".split(), stdout=subprocess.PIPE)
         process.communicate()
 
     if not os.path.exists(tagger_jar):
@@ -34,7 +31,7 @@ def map_ner(
     stanford_ner_tagger: StanfordNERTagger,
     pre_process=r"[^a-zA-Z0-9]+",
 ) -> CoordinateMap:
-    """map NER tagging"""
+    """Map NER tagging."""
     pos_set = set()
     if pattern.pos:
         pos_set = set(pattern.pos)
@@ -62,7 +59,6 @@ def map_ner(
     # add these coordinates to our coordinate map
     start_coordinate = 0
     for word in cleaned:
-
         word_clean = re.sub(pre_process, "", word.lower().strip())
         if len(word_clean) == 0:
             # got a blank space or something without any characters or digits, move forward
@@ -75,7 +71,7 @@ def map_ner(
             if ner_tag in pos_set:
                 stop = start + len(word)
                 coord_map.add_extend(start, stop)
-                print("FOUND: ", word, "NER: ", ner_tag, start, stop)
+                sys.stdout.write(f"FOUND: {word}  NER: {ner_tag} {start} {stop}")
 
         # advance our start coordinate
         start_coordinate += len(word)

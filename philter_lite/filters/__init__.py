@@ -134,9 +134,9 @@ def filter_from_dict(
 
 
 def load_filters(filter_path) -> List[Filter]:
-    """Loads filters from a file on disk.
+    """Load filters from a file on disk.
 
-    File must be a toml file with a key of `filters`
+    File must be a toml file with a key of `filters`.
     """
     if not os.path.exists(filter_path):
         raise Exception("Filepath does not exist", filter_path)
@@ -145,8 +145,8 @@ def load_filters(filter_path) -> List[Filter]:
     return [filter_from_dict(x) for x in filters_toml["filters"]]
 
 
-def _precompile(regex: str):
-    """precompiles our regex to speed up pattern matching"""
+def _precompile(regex: str) -> Pattern[str]:
+    """Precompile our regex to speed up pattern matching."""
     # NOTE: this is not thread safe! but we want to print a more detailed warning message
     with warnings.catch_warnings():
         warnings.simplefilter(action="error", category=FutureWarning)  # in order to print a detailed message
