@@ -1,6 +1,7 @@
 import argparse
 import distutils.util
 import os
+import sys
 
 import philter_lite
 
@@ -13,16 +14,14 @@ def main():
         "-i",
         "--input",
         default="./data/i2b2_notes/",
-        help="Path to the directory or the file that contains the PHI note, the default is "
-        "./data/i2b2_notes/",
+        help="Path to the directory or the file that contains the PHI note, the default is ./data/i2b2_notes/",
         type=str,
     )
     ap.add_argument(
         "-a",
         "--anno",
         default="./data/i2b2_anno/",
-        help="Path to the directory or the file that contains the PHI annotation, the default is "
-        "./data/i2b2_anno/",
+        help="Path to the directory or the file that contains the PHI annotation, the default is ./data/i2b2_anno/",
         type=str,
     )
     ap.add_argument(
@@ -84,8 +83,7 @@ def main():
     ap.add_argument(
         "--outputformat",
         default="i2b2",
-        help='Define format of annotation, allowed values are "asterisk", "i2b2". Default '
-        'is "asterisk"',
+        help='Define format of annotation, allowed values are "asterisk", "i2b2". Default is "asterisk"',
         type=str,
     )
     ap.add_argument(
@@ -142,29 +140,21 @@ def main():
         }
 
     if verbose:
-        print("RUNNING ", philter_config["filters"])
+        sys.stdout.write(f"RUNNING {philter_config['filters']}\n")
 
     filters = philter_lite.load_filters(philter_config["filters"])
 
-    for root, dirs, files in os.walk(philter_config["finpath"]):
+    for root, _dirs, files in os.walk(philter_config["finpath"]):
         for file in files:
             with open(os.path.join(root, file)) as inf:
                 text = inf.read()
-                include_map, exclude_map, data_tracker = philter_lite.detect_phi(
-                    text, patterns=filters
-                )
+                include_map, exclude_map, data_tracker = philter_lite.detect_phi(text, patterns=filters)
                 if philter_config["outformat"] == "i2b2":
-                    with open(
-                        os.path.join(philter_config["foutpath"], f"{file}.txt"), "w"
-                    ) as fout:
+                    with open(os.path.join(philter_config["foutpath"], f"{file}.txt"), "w") as fout:
                         fout.write(philter_lite.transform_text_i2b2(data_tracker))
                 elif philter_config["outformat"] == "asterisk":
-                    with open(
-                        os.path.join(philter_config["foutpath"], f"{file}.txt"), "w"
-                    ) as fout:
-                        fout.write(
-                            philter_lite.transform_text_asterisk(text, include_map)
-                        )
+                    with open(os.path.join(philter_config["foutpath"], f"{file}.txt"), "w") as fout:
+                        fout.write(philter_lite.transform_text_asterisk(text, include_map))
 
 
 if __name__ == "__main__":

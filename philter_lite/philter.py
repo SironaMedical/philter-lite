@@ -82,7 +82,7 @@ def detect_phi(
     pos_list = _get_pos(text_data)
 
     # Create inital self.exclude/include for file
-    for i, pat in enumerate(patterns):
+    for _i, pat in enumerate(patterns):
         pattern_coord = pattern_coords[pat.title]
 
         if pat.type == "regex" and isinstance(pat, RegexFilter):
@@ -98,9 +98,7 @@ def detect_phi(
                 pattern=pat,
             )
         elif pat.type == "pos_matcher" and isinstance(pat, PosFilter):
-            _map_parts_of_speech(
-                pos_list=pos_list, coord_map=pattern_coord, pattern=pat
-            )
+            _map_parts_of_speech(pos_list=pos_list, coord_map=pattern_coord, pattern=pat)
         elif pat.type == "match_all":
             _match_all(text=text_data, coord_map=pattern_coord)
         else:
@@ -343,9 +341,7 @@ def _map_set(pos_list, coord_map: CoordinateMap, pattern: SetFilter) -> Coordina
     return coord_map
 
 
-def _map_parts_of_speech(
-    pos_list, pattern: PosFilter, coord_map: CoordinateMap
-) -> CoordinateMap:
+def _map_parts_of_speech(pos_list, pattern: PosFilter, coord_map: CoordinateMap) -> CoordinateMap:
     """Creates a coordinate mapping of words which match this part of speech (POS)"""
 
     pos_set = set(pattern.pos)

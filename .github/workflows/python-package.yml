@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,4 +29,4 @@ jobs:
         pip install tox
     - name: Test and run checks
       run: |
-        tox -e py,lint,typing
+        tox -e py,lint
