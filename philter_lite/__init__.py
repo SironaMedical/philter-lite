@@ -1,4 +1,5 @@
 """The philter_lite package."""
+
 from importlib import metadata
 
 from philter_lite.coordinate_map import CoordinateMap
