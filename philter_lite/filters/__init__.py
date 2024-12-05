@@ -1,10 +1,14 @@
 import os
 import re
+import sys
 import warnings
 from dataclasses import dataclass
 from typing import List, Optional, Pattern, Set
 
-import toml
+if sys.version_info < (3, 11):
+    import tomli as tomllib
+else:
+    import tomllib
 
 from philter_lite.filters import filter_db
 
@@ -136,8 +140,9 @@ def load_filters(filter_path) -> List[Filter]:
     """
     if not os.path.exists(filter_path):
         raise Exception("Filepath does not exist", filter_path)
-    with open(filter_path, "r") as fil_file:
-        return [filter_from_dict(x) for x in toml.loads(fil_file.read())["filters"]]
+    with open(filter_path, "rb") as fil_file:
+        filters_toml = tomllib.load(fil_file)
+    return [filter_from_dict(x) for x in filters_toml["filters"]]
 
 
 def _precompile(regex: str) -> Pattern[str]:

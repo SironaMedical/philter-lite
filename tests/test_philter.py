@@ -17,14 +17,14 @@ def test_filter_from_dict():
         "phi_type": "SOMETHING",
     }
 
-    filter = filter_from_dict(filter_dict)
+    my_filter = filter_from_dict(filter_dict)
 
-    assert filter.type == "regex"
-    assert filter.title == "test_city"
-    assert filter.data is not None
-    assert filter.exclude == "test_ex"
-    assert filter.phi_type == "SOMETHING"
-    assert isinstance(filter, filters.RegexFilter)
+    assert my_filter.type == "regex"
+    assert my_filter.title == "test_city"
+    assert my_filter.data is not None
+    assert my_filter.exclude == "test_ex"
+    assert my_filter.phi_type == "SOMETHING"
+    assert isinstance(my_filter, filters.RegexFilter)
 
     filter_dict = {
         "title": "Find Names 1",
@@ -36,15 +36,15 @@ def test_filter_from_dict():
         "phi_type": "Something",
     }
 
-    filter = filter_from_dict(filter_dict)
+    my_filter = filter_from_dict(filter_dict)
 
-    assert filter.type == "regex_context"
-    assert filter.title == "Find Names 1"
-    assert filter.data is not None
-    assert filter.exclude is True
-    assert filter.context == "right"
-    assert filter.context_filter == "Firstnames Blacklist"
-    assert isinstance(filter, filters.RegexContextFilter)
+    assert my_filter.type == "regex_context"
+    assert my_filter.title == "Find Names 1"
+    assert my_filter.data is not None
+    assert my_filter.exclude is True
+    assert my_filter.context == "right"
+    assert my_filter.context_filter == "Firstnames Blacklist"
+    assert isinstance(my_filter, filters.RegexContextFilter)
 
     filter_dict = {
         "title": "Whitelist 1",
@@ -55,14 +55,14 @@ def test_filter_from_dict():
         "phi_type": "Something",
     }
 
-    filter = filter_from_dict(filter_dict)
+    my_filter = filter_from_dict(filter_dict)
 
-    assert filter.type == "set"
-    assert filter.title == "Whitelist 1"
-    assert filter.data is not None
-    assert filter.exclude is False
-    assert filter.pos == set()
-    assert isinstance(filter, filters.SetFilter)
+    assert my_filter.type == "set"
+    assert my_filter.title == "Whitelist 1"
+    assert my_filter.data is not None
+    assert my_filter.exclude is False
+    assert my_filter.pos == set()
+    assert isinstance(my_filter, filters.SetFilter)
 
     filter_dict = {
         "title": "POS MATCHER",
@@ -72,13 +72,13 @@ def test_filter_from_dict():
         "phi_type": "OTHER",
     }
 
-    filter = filter_from_dict(filter_dict)
+    my_filter = filter_from_dict(filter_dict)
 
-    assert filter.type == "pos_matcher"
-    assert filter.title == "POS MATCHER"
-    assert filter.exclude is False
-    assert filter.pos == ["CD"]
-    assert isinstance(filter, filters.PosFilter)
+    assert my_filter.type == "pos_matcher"
+    assert my_filter.title == "POS MATCHER"
+    assert my_filter.exclude is False
+    assert my_filter.pos == ["CD"]
+    assert isinstance(my_filter, filters.PosFilter)
 
 
 def test_filter_from_dict_missing_phi_type():
@@ -90,8 +90,8 @@ def test_filter_from_dict_missing_phi_type():
         "notes": "test_notes",
     }
 
-    filter = filter_from_dict(filter_dict)
-    assert filter.phi_type == "OTHER"
+    my_filter = filter_from_dict(filter_dict)
+    assert my_filter.phi_type == "OTHER"
 
 
 def test_filter_from_dict_missing_file():
