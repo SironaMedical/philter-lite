@@ -1,11 +1,6 @@
-import sys
+import tomllib
 from importlib.resources import as_file, files
 from typing import Any, MutableMapping
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
 
 from philter_lite import filters
 

@@ -1,14 +1,8 @@
 """Confirm that project metadata is set correctly."""
 
 import os
-import sys
+import tomllib
 from typing import Any, Mapping
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
-
 
 import philter_lite
 

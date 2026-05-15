@@ -1,14 +1,9 @@
 import os
 import re
-import sys
+import tomllib
 import warnings
 from dataclasses import dataclass
 from typing import List, Optional, Pattern, Set
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
 
 from philter_lite.filters import filter_db
 
