@@ -145,6 +145,45 @@ def test_detect_phi():
     assert len(data_tracker.phi) == 2
 
 
+@pytest.mark.parametrize(
+    "text, expected_ages",
+    [
+        ("Patient is 99 years old.", ["99"]),
+        ("Patient is 99 YEARS OLD.", ["99"]),
+        ("She is 102 years old and has been ill for 5 years.", ["102"]),
+        ("Symptoms persisted for 5 years.", []),
+        ("Pain reported over the last 3 months.", []),
+        ("In 2 weeks the follow-up is scheduled.", []),
+        ("Age: 99 years.", []),
+    ],
+)
+def test_detect_phi_extreme_age_not_marked_safe(text, expected_ages):
+    patterns = [
+        filter_from_dict(
+            {
+                "title": "time range safe",
+                "type": "regex",
+                "exclude": False,
+                "keyword": "safe.time_range_safe",
+                "phi_type": "OTHER",
+            }
+        ),
+        filter_from_dict(
+            {
+                "title": "x years old",
+                "type": "regex",
+                "exclude": True,
+                "keyword": "age.x_years_old",
+                "phi_type": "AGE",
+            }
+        ),
+    ]
+    include_map, exclude_map, data_tracker = detect_phi(text, patterns, ["AGE"])
+
+    ages = [p.word for p in data_tracker.phi if p.phi_type == "AGE"]
+    assert ages == expected_ages
+
+
 def test_detect_phi_regex_interpolation():
     # At runtime, we compute the seasons value in the regex, by interpolating a variable name.
     patterns = [
